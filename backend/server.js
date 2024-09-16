@@ -17,7 +17,7 @@ const app = express();
 
 const PORT = process.env.PORT;
 
-app.use(express.json()); //this will allow us to parse the body of the request
+app.use(express.json({ limit: "10mb" })); //this will allow us to parse the body of the request
 app.use(cookieParser());
 
 app.use("/api/auth", authRoutes);
