@@ -3,9 +3,11 @@ import React from "react";
 import toast from "react-hot-toast";
 
 import { useUserStore } from "../stores/useUserStore";
+import { useCartStore } from "../stores/useCartStore";
 
 const ProductCard = ({ product }) => {
   const { user } = useUserStore();
+  const { addToCart } = useCartStore();
 
   const handleAddToCart = () => {
     if (!user) {
@@ -21,6 +23,10 @@ const ProductCard = ({ product }) => {
           secondary: "#FFFAEE",
         },
       });
+      return;
+    } else {
+      //Add to cart functionality
+      addToCart(product);
     }
   };
 
