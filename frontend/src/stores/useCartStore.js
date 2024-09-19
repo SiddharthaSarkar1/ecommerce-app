@@ -43,20 +43,44 @@ export const useCartStore = create((set, get) => ({
       toast.error(error.response.data.message || "An error occurred");
     }
   },
+  removeFromCart: async (productId) => {
+    await axios.delete(`/cart`, { data: { productId } });
+    set((prevState) => ({
+      cart: prevState.cart.filter((item) => item._id !== productId),
+    }));
+    get().calculateTotals();
+  },
+  updateQuantity: async (productId, quantity) => {
+    if (quantity === 0) {
+      get().removeFromCart(productId);
+      return;
+    }
 
+    try {
+      await axios.put(`/cart/${productId}`, { quantity });
+      set((prevState) => ({
+        cart: prevState.cart.map((item) =>
+          item._id === productId ? { ...item, quantity } : item
+        ),
+      }));
+      get().calculateTotals();
+    } catch (error) {
+      toast.error(error.response.data.message || "An error occurred");
+    }
+  },
   calculateTotals: () => {
     const { cart, coupon } = get();
     const subtotal = cart.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0
     );
-    const total = subtotal;
+    let total = subtotal;
 
     if (coupon) {
       const discount = subtotal * (coupon.discountPercentage / 100);
-      const total = subtotal - discount;
+      total = subtotal - discount;
     }
 
-    return { subtotal, total };
+    set({ subtotal, total });
   },
 }));
