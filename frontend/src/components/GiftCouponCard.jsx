@@ -1,10 +1,20 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCartStore } from "../stores/useCartStore";
 
 const GiftCouponCard = () => {
   const [userInputCode, setUserInputCode] = useState("");
-  const { coupon, isCouponApplied } = useCartStore();
+  const { coupon, isCouponApplied, getMyCoupon, applyCoupon, removeCoupon } =
+    useCartStore();
+
+  useEffect(() => {
+    getMyCoupon();
+  }, [getMyCoupon]);
+
+  useEffect(() => {
+    if (coupon) setUserInputCode(coupon.code);
+    console.log(coupon)
+  }, [coupon]);
 
   const handleRemoveCoupon = () => {};
 
@@ -74,9 +84,7 @@ const GiftCouponCard = () => {
           <h3 className="text-lg font-medium text-gray-300">
             Your Available Coupon:
           </h3>
-          <p className="mt-2 text-sm text-gray-400">
-            10% off
-          </p>
+          <p className="mt-2 text-sm text-gray-400">10% off</p>
         </div>
       )}
     </motion.div>
