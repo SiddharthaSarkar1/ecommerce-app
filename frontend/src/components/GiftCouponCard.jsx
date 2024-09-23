@@ -13,12 +13,18 @@ const GiftCouponCard = () => {
 
   useEffect(() => {
     if (coupon) setUserInputCode(coupon.code);
-    console.log(coupon)
+    // console.log(coupon);
   }, [coupon]);
 
-  const handleRemoveCoupon = () => {};
+  const handleApplyCoupon = () => {
+    if (!userInputCode) return;
+    applyCoupon(userInputCode);
+  };
 
-  const handleApplyCoupon = () => {};
+  const handleRemoveCoupon = async () => {
+    await removeCoupon();
+    setUserInputCode("");
+  };
 
   return (
     <motion.div

@@ -35,9 +35,9 @@ export const createCheckoutSession = async (req, res) => {
     let coupon = null;
 
     if (couponCode) {
-      const coupon = await Coupon.findOne({
+      coupon = await Coupon.findOne({
         code: couponCode,
-        user: req.user._id,
+        userId: req.user._id,
         isActive: true,
       });
       if (coupon) {
